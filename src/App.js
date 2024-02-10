@@ -83,7 +83,7 @@ function App() {
   return (
     <div>
       
-      <img src={`/public/logo192.png`} alt={"logo"} width="250" height="200" />
+      <img src={`public/logo192.png`} alt={"logo"} width="250" height="200" />
       <h1 class="advertise">J2, the freshest</h1>
       <h2 class="slogan">Best japanese restaurant in town</h2>
 
