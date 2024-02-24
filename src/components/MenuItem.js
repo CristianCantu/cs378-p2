@@ -12,7 +12,7 @@ const MenuItem = ({ title, description, imageName, price }) => {
                 <img src={"./" + imageName} alt={title} width="150" height="150" />
             </div>
             <div className="col-md-6 col-xs-6">
-                <h1>{title}</h1>
+                <h1>{imageName}</h1>
                 <p>{description}</p>
                 <div className="row">
                     <div className="col">
