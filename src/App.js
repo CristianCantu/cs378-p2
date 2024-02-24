@@ -1,4 +1,5 @@
 import './App.css';
+import React, { useState } from 'react';
 import MenuItem from './components/MenuItem';
 
 // import 'bootstrap/dist/css/bootstrap.min.css'; // This imports bootstrap css styles. You can use bootstrap or your own classes by using the className attribute in your elements.
@@ -79,11 +80,59 @@ const menuItems = [
 ];
 
 
+
+
 function App() {
+
+  const [cartItems, setCartItems] = useState({});
+  
+
+    const handleAddToCart = (itemId) => {
+      setCartItems((prevCart) => {
+        const updatedCart = { ...prevCart };
+        updatedCart[itemId] = (updatedCart[itemId] || 0) + 1;
+        return updatedCart;
+      });
+    };
+
+    const handleRemoveFromCart = (itemId) => {
+    setCartItems((prevCart) => {
+        const updatedCart = { ...prevCart };
+        if (updatedCart[itemId] > 0) {
+        updatedCart[itemId] -= 1;
+        }
+        return updatedCart;
+    });
+    };
+
+
+    const getTotalAmount = () => {
+    return Object.keys(cartItems).reduce((total, itemId) => {
+        const menuItem = menuItems.find((item) => item.id.toString() === itemId);
+        return total + (menuItem ? menuItem.price * cartItems[itemId] : 0);
+    }, 0).toFixed(2);
+    };
+
+    const handleOrder = () => {
+      const orderDetails = Object.keys(cartItems)
+        .map((itemId) => {
+          const menuItem = menuItems.find((item) => item.id.toString() === itemId);
+          return `${menuItem.title}: ${cartItems[itemId]}`;
+        })
+        .join('\n');
+  
+      alert(`Order details:\n${orderDetails}`);
+    };
+      
+    const handleClearAll = () => {
+      setCartItems({});
+      getTotalAmount();
+    };
+
   return (
     <div>
       
-      <img src={`public/logo192.png`} alt={"logo"} width="250" height="200" />
+      <img src={"public/logo192.png"} alt={"logo"} width="250" height="200" />
       <h1 class="advertise">J2, the freshest</h1>
       <h2 class="slogan">Best japanese restaurant in town</h2>
 
@@ -96,8 +145,25 @@ function App() {
           description={item.description}
           imageName={item.imageName}
           price={item.price}
+          count={cartItems[item.id] || 0}
+          onAddToCart={() => handleAddToCart(item.id)}
+          onRemoveFromCart={() => handleRemoveFromCart(item.id)}
           />))}  {}
       </div>
+
+      <div className="row">
+          <div className="col">
+              <p>Subtotal: ${getTotalAmount()}</p>
+          </div>
+          <div className="col">
+              <button onClick={handleOrder} type="button" className="btn btn-primary"> Order </button>
+          </div>
+
+          <div className="col">
+              <button onClick={handleClearAll} type="button" className="btn btn-primary"> Clear All </button>
+          </div>
+      </div>
+
     </div>
   );
 }
